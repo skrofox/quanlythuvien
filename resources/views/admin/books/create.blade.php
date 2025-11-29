@@ -14,6 +14,24 @@
                 <x-adminlte-input name="publisher" label="Nhà xuất bản" placeholder="Nhà xuất bản" />
                 <x-adminlte-input name="year" label="Năm xuất bản" type="number" placeholder="Năm xuất bản" />
 
+
+                <!-- Chọn danh mục -->
+                <div class="mb-3">
+                    <label>Danh mục</label>
+                    <div class="d-flex flex-wrap">
+                        @foreach ($categories as $cat)
+                            <div class="form-check me-3" style="margin-right: 12px">
+                                <input class="form-check-input" type="checkbox" name="categories[]"
+                                    value="{{ $cat->id }}" id="cat{{ $cat->id }}">
+                                <label class="form-check-label" for="cat{{ $cat->id }}">
+                                    {{ $cat->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+
                 <div class="p-2">
                     <x-adminlte-input-file name="images[]" label="Ảnh sách" multiple id="bookImages" />
                 </div>

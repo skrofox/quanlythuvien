@@ -14,19 +14,40 @@
             <x-adminlte-input name="author" label="Tác giả" value="{{ old('author', $book->author) }}" />
             <x-adminlte-input name="publisher" label="Nhà xuất bản" value="{{ old('publisher', $book->publisher) }}" />
             <x-adminlte-input name="year" label="Năm xuất bản" type="number" value="{{ old('year', $book->year) }}" />
+            <x-adminlte-input name="slug" label="Slug" value="{{ old('slug', $book->slug) }}" />
 
+            <!-- Chọn danh mục -->
+            <div class="mb-3">
+                <label>Danh mục</label>
+                <div class="d-flex flex-wrap">
+                    @foreach($categories as $cat)
+                        <div class="form-check me-3" style="margin-right: 12px">
+                            <input class="form-check-input" type="checkbox"
+                                   name="categories[]" value="{{ $cat->id }}" id="cat{{ $cat->id }}"
+                                   {{ in_array($cat->id, $book->categories->pluck('id')->toArray()) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="cat{{ $cat->id }}">
+                                {{ $cat->name }}
+                            </label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Upload ảnh mới -->
             <div class="p-2">
                 <x-adminlte-input-file name="images[]" label="Ảnh sách mới" multiple id="bookImages" />
             </div>
 
             <!-- Hiển thị ảnh hiện tại -->
-            <div class="d-flex flex-wrap gap-2 mb-3">
+            <h3>Ảnh cũ</h3>
+            <div id="current-images" class="d-flex flex-wrap gap-2 mb-3">
                 @foreach($book->images as $img)
-                    <img src="{{ Storage::url($img->url) }}" class="img-thumbnail" style="max-width:200px;">
+                    <img src="{{ asset('storage/'.$img->url) }}" class="img-thumbnail" style="max-width:150px;">
                 @endforeach
             </div>
 
             <!-- Preview ảnh mới chọn -->
+            <h3>Ảnh mới</h3>
             <div id="preview" class="d-flex flex-wrap gap-2"></div>
 
             <x-adminlte-button class="btn-primary mt-3" type="submit" label="Cập nhật sách" />
@@ -37,25 +58,35 @@
 
 @section('js')
 <script>
-    document.getElementById('bookImages').addEventListener('change', function (event) {
-        const preview = document.getElementById('preview');
-        preview.innerHTML = "";
-        const files = event.target.files;
+    const inputFile = document.getElementById('bookImages');
+    const preview = document.getElementById('preview');
+    const currentImages = document.getElementById('current-images');
 
-        Array.from(files).forEach(file => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.classList.add('img-thumbnail');
-                    img.style.maxWidth = '150px';
-                    img.style.margin = '5px';
-                    preview.appendChild(img);
+    inputFile.addEventListener('change', function(event) {
+        // Nếu chọn ảnh mới thì ẩn ảnh cũ
+        if (event.target.files.length > 0) {
+            currentImages.style.display = 'none'; // ẩn ảnh cũ
+            preview.innerHTML = ""; // clear preview cũ
+
+            Array.from(event.target.files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.classList.add('img-thumbnail');
+                        img.style.maxWidth = '150px';
+                        img.style.margin = '5px';
+                        preview.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
-        });
+            });
+        } else {
+            // Nếu không chọn ảnh mới thì hiển thị lại ảnh cũ
+            currentImages.style.display = 'flex';
+            preview.innerHTML = "";
+        }
     });
 </script>
 @endsection

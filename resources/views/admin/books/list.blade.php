@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                <img style="width: 52px; height: 100%" src="{{ Storage::url($book->images->first()->url) }}" alt="{{ $book->name }}">
+                                <img style="width: 52px; height: 100%" src="{{ Storage::url($book->images->first()->url ?? "") }}" alt="{{ $book->name }}">
                             </td>
                             <td>{{ $book->name }}</td>
                             <td>{{ $book->author }}</td>

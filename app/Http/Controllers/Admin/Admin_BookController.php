@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookImage;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,7 +26,8 @@ class Admin_BookController extends Controller
      */
     public function create()
     {
-        return view('admin.books.create');
+        $categories = Category::orderBy('id', 'desc')->get();
+        return view('admin.books.create', compact('categories'));
     }
 
     /**
@@ -40,6 +42,7 @@ class Admin_BookController extends Controller
             'year'      => 'nullable|integer',
             'slug'      => 'nullable|string|max:255',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
+            'categories' => 'array', // validate mảng danh mục
         ]);
 
         $book = Book::create([
@@ -50,12 +53,18 @@ class Admin_BookController extends Controller
             'slug'      => $request->slug ?? Str::slug($request->name),
         ]);
 
+        // Gán danh mục
+        if ($request->filled('categories')) {
+            $book->categories()->sync($request->categories);
+        }
+
+        // Upload ảnh
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $file) {
                 $path = $file->store('books', 'public');
                 BookImage::create([
                     'book_id' => $book->id,
-                    'url'    => $path,
+                    'url'     => $path,
                 ]);
             }
         }
@@ -78,17 +87,20 @@ class Admin_BookController extends Controller
     public function edit(string $id)
     {
         $book = Book::with('images')->findOrFail($id);
+        $categories = Category::all();
 
-        if(!$book){
+
+        if (!$book) {
             return back()->with('error', 'Err');
         }
 
-        return view('admin.books.edit', compact('book'));
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, $id)
     {
         $book = Book::findOrFail($id);
@@ -98,7 +110,9 @@ class Admin_BookController extends Controller
             'author'    => 'required|string|max:255',
             'publisher' => 'nullable|string|max:255',
             'year'      => 'nullable|integer',
+            'slug'      => 'nullable|string|max:255',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
+            'categories' => 'array',
         ]);
 
         $book->update([
@@ -106,21 +120,33 @@ class Admin_BookController extends Controller
             'author'    => $request->author,
             'publisher' => $request->publisher,
             'year'      => $request->year,
-            'slug'      => $request->slug ?? Str::slug($request->name) . '-' . time(),
+            'slug'      => $request->slug ?? Str::slug($request->name),
         ]);
 
+        // Cập nhật danh mục
+        $book->categories()->sync($request->categories ?? []);
+
+        // Nếu có ảnh mới thì xoá ảnh cũ trước
         if ($request->hasFile('images')) {
+            // Xoá ảnh cũ trong storage và DB
+            foreach ($book->images as $img) {
+                Storage::disk('public')->delete($img->url);
+                $img->delete();
+            }
+
+            // Upload ảnh mới
             foreach ($request->file('images') as $file) {
                 $path = $file->store('books', 'public');
                 BookImage::create([
                     'book_id' => $book->id,
-                    'url'    => $path,
+                    'url'     => $path,
                 ]);
             }
         }
 
         return redirect()->route('admin.books.list')->with('success', 'Cập nhật sách thành công!');
     }
+
 
 
     /**
@@ -138,5 +164,4 @@ class Admin_BookController extends Controller
 
         return redirect()->route('admin.books.list')->with('success', 'Xóa sách thành công!');
     }
-
 }
