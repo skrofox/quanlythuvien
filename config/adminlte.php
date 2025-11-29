@@ -333,6 +333,21 @@ return [
             'icon' => 'fas fa-book'
         ],
         [
+            'text' => 'Quản lý thuê sách',
+            'url' => 'admin/rentals',
+            'icon' => 'fa-brands fa-accusoft'
+        ],
+        [
+            'text' => 'Quản lý thanh toán',
+            'url' => 'admin/payments',
+            'icon' => 'fa-solid fa-credit-card'
+        ],
+        [
+            'text' => 'Quản lý đánh giá',
+            'url' => 'admin/reviews',
+            'icon' => 'fa-solid fa-star'
+        ],
+        [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',

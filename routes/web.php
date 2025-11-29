@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Admin_BookController;
 use App\Http\Controllers\Admin\Admin_CategoryController;
+use App\Http\Controllers\Admin\Admin_RentalController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\ProfileController;
@@ -69,6 +70,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
         //Delete book
         Route::delete('/destroy/{id}', [Admin_BookController::class, 'destroy'])->name('destroy');
+    });
+
+    //======= Admin Rental Router Management ===============
+    Route::prefix('/rentals')->name('rentals.')->group(function () {
+        Route::get('/', [Admin_RentalController::class, 'index'])->name('list');
     });
 });
 
