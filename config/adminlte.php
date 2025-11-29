@@ -325,6 +325,11 @@ return [
         [
             'text' => 'Quản lý danh mục',
             'url' => 'admin/categories',
+            'icon' => 'fas fa-list'
+        ],
+        [
+            'text' => 'Quản lý sách',
+            'url' => 'admin/books',
             'icon' => 'fas fa-book'
         ],
         [

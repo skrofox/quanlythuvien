@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\Admin_BookController;
 use App\Http\Controllers\Admin\Admin_CategoryController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
@@ -22,11 +23,11 @@ Route::middleware('auth')->group(function () {
 
 
 //========================= Admin Router =========================
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function() {
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     //====== Admin User Router Management ===============
-    Route::prefix('/users')->name('users.')->group(function() {
+    Route::prefix('/users')->name('users.')->group(function () {
         //list users
         Route::get('/', [Admin_UserController::class, 'index'])->name('list');
         //Add User
@@ -41,7 +42,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     });
 
     //======= Admin Categories Router Management ===============
-    Route::prefix('/categories')->name('categories.')->group(function() {
+    Route::prefix('/categories')->name('categories.')->group(function () {
         Route::get('/', [Admin_CategoryController::class, 'index'])->name('list');
         //Add Category
         Route::post('store', [Admin_CategoryController::class, 'store'])->name('store');
@@ -55,6 +56,20 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     });
 
     //======= Admin Book Router Management ===============
+    Route::prefix('/books')->name('books.')->group(function () {
+        Route::get('/', [Admin_BookController::class, 'index'])->name('list');
+
+        //add books
+        Route::get('/create', [Admin_BookController::class, 'create'])->name('create');
+        Route::post('/store', [Admin_BookController::class, 'store'])->name('store');
+
+        //update book
+        Route::get('/edit/{id}', [Admin_BookController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [Admin_BookController::class, 'update'])->name('update');
+
+        //Delete book
+        Route::delete('/destroy/{id}', [Admin_BookController::class, 'destroy'])->name('destroy');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
