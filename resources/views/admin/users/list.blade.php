@@ -92,7 +92,7 @@
                             <label>Vai trò</label>
                             <select name="role" class="form-control">
                                 <option value="admin">Admin</option>
-                                <option value="user">User</option>
+                                <option value="user" selected>User</option>
                             </select>
                         </div>
 

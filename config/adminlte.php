@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin/dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -301,24 +301,31 @@ return [
     'menu' => [
         // Navbar items:
         [
+            'type' => 'navbar-search',
+            'text' => 'search',
+            'topnav_right' => true,
+        ],
+
+        [
+            'type' => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
+        // Sidebar items:
+        ['header' => 'Search'],
+        [
+            'type' => 'sidebar-menu-search',
+            'text' => 'search',
+        ],
+        ['header' => 'MANAGER'],
+        [
             'text' => 'Quản lý người dùng',
             'url' => 'admin/users',
             'icon' => 'fas fa-users'
         ],
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
-
-        // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Quản lý danh mục',
+            'url' => 'admin/categories',
+            'icon' => 'fas fa-book'
         ],
         [
             'text' => 'blog',
