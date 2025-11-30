@@ -24,4 +24,8 @@ class Rentals extends Model
     public function book(){
         return $this->belongsTo(Book::class, "book_id", "id");
     }
+
+    public function payments(){
+        return $this->hasMany(Payment::class, "rental_id", "id");
+    }
 }

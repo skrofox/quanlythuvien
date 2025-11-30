@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rentals;
+use App\Models\User;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class Admin_RentalController extends Controller
@@ -13,7 +15,7 @@ class Admin_RentalController extends Controller
      */
     public function index()
     {
-        $rentals = Rentals::orderBy('id', 'desc')->get();
+        $rentals = Rentals::with(['user', 'book'])->orderBy('id', 'desc')->get();
         return view('admin.rentals.list', compact('rentals'));
     }
 
@@ -22,7 +24,9 @@ class Admin_RentalController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::orderBy('name')->get();
+        $books = Book::orderBy('name')->get();
+        return view('admin.rentals.create', compact('users', 'books'));
     }
 
     /**
@@ -30,7 +34,25 @@ class Admin_RentalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'rented_at' => 'required|date',
+            'due_at' => 'required|date|after:rented_at',
+            'returned_at' => 'nullable|date',
+            'status' => 'required|string|in:active,rented,returned,overdue',
+        ]);
+
+        Rentals::create([
+            'user_id' => $request->user_id,
+            'book_id' => $request->book_id,
+            'rented_at' => $request->rented_at,
+            'due_at' => $request->due_at,
+            'returned_at' => $request->returned_at,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.rentals.list')->with('success', 'Thêm thuê sách thành công!');
     }
 
     /**
@@ -46,7 +68,10 @@ class Admin_RentalController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rental = Rentals::findOrFail($id);
+        $users = User::orderBy('name')->get();
+        $books = Book::orderBy('name')->get();
+        return view('admin.rentals.edit', compact('rental', 'users', 'books'));
     }
 
     /**
@@ -54,7 +79,27 @@ class Admin_RentalController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rental = Rentals::findOrFail($id);
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'rented_at' => 'required|date',
+            'due_at' => 'required|date|after:rented_at',
+            'returned_at' => 'nullable|date',
+            'status' => 'required|string|in:active,rented,returned,overdue',
+        ]);
+
+        $rental->update([
+            'user_id' => $request->user_id,
+            'book_id' => $request->book_id,
+            'rented_at' => $request->rented_at,
+            'due_at' => $request->due_at,
+            'returned_at' => $request->returned_at,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.rentals.list')->with('success', 'Cập nhật thuê sách thành công!');
     }
 
     /**
@@ -62,6 +107,9 @@ class Admin_RentalController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $rental = Rentals::findOrFail($id);
+        $rental->delete();
+
+        return redirect()->route('admin.rentals.list')->with('success', 'Xóa thuê sách thành công!');
     }
 }

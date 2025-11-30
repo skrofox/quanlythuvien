@@ -11,9 +11,9 @@ class Payment extends Model
     protected $fillable = [
         "user_id",
         "rental_id",
-        "amount",
-        "method",
-        "status",
+        "amount", // số tiền thanh toán
+        "method", // phương thức: momo, paypal, credit_card...
+        "status", // trạng thái: pending, paid, failed, refunded
     ];
 
     public function user(){
