@@ -338,6 +338,11 @@ return [
             'icon' => 'fa-brands fa-accusoft'
         ],
         [
+            'text' => 'Quản lý mức giá mượn sách',
+            'url' => 'admin/rental-pricings',
+            'icon' => 'fa-solid fa-tags'
+        ],
+        [
             'text' => 'Quản lý thanh toán',
             'url' => 'admin/payments',
             'icon' => 'fa-solid fa-credit-card'

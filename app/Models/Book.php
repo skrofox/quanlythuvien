@@ -16,6 +16,7 @@ class Book extends Model
         "year",
         "slug",
         "summary",
+        "status",
     ];
 
     public function images(){

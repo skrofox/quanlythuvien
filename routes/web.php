@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Admin_BookController;
 use App\Http\Controllers\Admin\Admin_CategoryController;
 use App\Http\Controllers\Admin\Admin_PaymentController;
 use App\Http\Controllers\Admin\Admin_RentalController;
+use App\Http\Controllers\Admin\Admin_RentalPricingController;
 use App\Http\Controllers\Admin\Admin_ReviewController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
@@ -29,6 +30,10 @@ Route::middleware('auth')->group(function () {
     //======= Frontend Auth Router Management ===============
     Route::get('/account', [HeaderController::class, 'account'])->name('account');
     Route::get('/book-rental/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
+    Route::post('/book-rental/{slug}', [RentalController::class, 'store'])->name('book.rental.store');
+    Route::get('/payment/process/{paymentId}', [RentalController::class, 'paymentProcess'])->name('book.rental.payment.process');
+    Route::post('/payment/callback/{paymentId}', [RentalController::class, 'paymentCallback'])->name('book.rental.payment.callback');
+    Route::get('/payment/success/{paymentId}', [RentalController::class, 'paymentSuccess'])->name('book.rental.success');
 });
 
 //========= API Qoutes ============
@@ -95,6 +100,15 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/edit/{id}', [Admin_RentalController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [Admin_RentalController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [Admin_RentalController::class, 'destroy'])->name('destroy');
+    });
+
+    //======= Admin Rental Pricing Router Management ===============
+    Route::prefix('/rental-pricings')->name('rental-pricings.')->group(function () {
+        Route::get('/', [Admin_RentalPricingController::class, 'index'])->name('list');
+        Route::post('/store', [Admin_RentalPricingController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [Admin_RentalPricingController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [Admin_RentalPricingController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [Admin_RentalPricingController::class, 'destroy'])->name('destroy');
     });
 
     //======= Admin Payment Router Management ===============

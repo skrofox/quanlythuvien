@@ -46,7 +46,6 @@ class Admin_PaymentController extends Controller
             'user_id' => $request->user_id,
             'rental_id' => $request->rental_id,
             'amount' => $request->amount,
-            'method' => $request->method,
             'status' => $request->status,
         ]);
 
@@ -91,7 +90,6 @@ class Admin_PaymentController extends Controller
             'user_id' => $request->user_id,
             'rental_id' => $request->rental_id,
             'amount' => $request->amount,
-            'method' => $request->method,
             'status' => $request->status,
         ]);
 

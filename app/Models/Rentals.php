@@ -11,6 +11,7 @@ class Rentals extends Model
     protected $fillable = [
         "user_id",
         "book_id",
+        "rental_pricing_id",
         "rented_at",
         "due_at",
         "returned_at",
@@ -27,5 +28,9 @@ class Rentals extends Model
 
     public function payments(){
         return $this->hasMany(Payment::class, "rental_id", "id");
+    }
+
+    public function rentalPricing(){
+        return $this->belongsTo(RentalPricing::class, "rental_pricing_id", "id");
     }
 }
