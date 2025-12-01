@@ -1,4 +1,8 @@
-<x-guest-layout>
+{{-- <x-guest-layout> --}}
+@extends('frontend.layout.app')
+@section('title', 'Đăng ký')
+
+@section('content')
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -49,4 +53,5 @@
             </x-primary-button>
         </div>
     </form>
-</x-guest-layout>
+@endsection
+{{-- </x-guest-layout> --}}

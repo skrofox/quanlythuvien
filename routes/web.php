@@ -7,12 +7,15 @@ use App\Http\Controllers\Admin\Admin_RentalController;
 use App\Http\Controllers\Admin\Admin_ReviewController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\FEnd\HeaderController;
+use App\Http\Controllers\FEnd\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RentalController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+//============UnAuth router management================
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/book-detail/{slug}', [HomeController::class, 'book_detail'])->name('book.detail');;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -22,7 +25,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //======= Frontend Auth Router Management ===============
+    Route::get('/account', [HeaderController::class, 'account'])->name('account');
+    Route::get('/book-rental/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
 });
+
+//========= API Qoutes ============
+Route::get('/quotes', [HomeController::class, 'quotes'])->name('quotes');
 
 
 //========================= Admin Router =========================

@@ -12,9 +12,9 @@
 
             <x-adminlte-input name="name" label="Tên Sách" value="{{ old('name', $book->name) }}" />
             <x-adminlte-input name="author" label="Tác giả" value="{{ old('author', $book->author) }}" />
+            <x-adminlte-textarea name="summary" label="Tóm tắt" rows="3"> {{ $book->summary }} </x-adminlte-textarea>
             <x-adminlte-input name="publisher" label="Nhà xuất bản" value="{{ old('publisher', $book->publisher) }}" />
             <x-adminlte-input name="year" label="Năm xuất bản" type="number" value="{{ old('year', $book->year) }}" />
-            <x-adminlte-input name="slug" label="Slug" value="{{ old('slug', $book->slug) }}" />
 
             <!-- Chọn danh mục -->
             <div class="mb-3">

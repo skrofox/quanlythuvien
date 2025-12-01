@@ -11,6 +11,7 @@
                 @csrf
                 <x-adminlte-input name="name" label="Tên Sách" placeholder="Nhập tên sách" />
                 <x-adminlte-input name="author" label="Tác giả" placeholder="Tên tác giả" />
+                <x-adminlte-textarea name="summary" label="Tóm tắt" placeholder="Tóm tắt, mô tả ngắn gọn về sách" rows="3" />
                 <x-adminlte-input name="publisher" label="Nhà xuất bản" placeholder="Nhà xuất bản" />
                 <x-adminlte-input name="year" label="Năm xuất bản" type="number" placeholder="Năm xuất bản" />
 

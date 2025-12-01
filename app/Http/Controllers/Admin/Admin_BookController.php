@@ -38,9 +38,9 @@ class Admin_BookController extends Controller
         $request->validate([
             'name'      => 'required|string|max:255',
             'author'    => 'required|string|max:255',
+            'summary'   => 'nullable|string|max:1000',
             'publisher' => 'nullable|string|max:255',
             'year'      => 'nullable|integer',
-            'slug'      => 'nullable|string|max:255',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
             'categories' => 'array', // validate mảng danh mục
         ]);
@@ -48,9 +48,10 @@ class Admin_BookController extends Controller
         $book = Book::create([
             'name'      => $request->name,
             'author'    => $request->author,
+            'summary'   => $request->summary,
             'publisher' => $request->publisher,
             'year'      => $request->year,
-            'slug'      => $request->slug ?? Str::slug($request->name),
+            'slug'      => Str::slug($request->name) . '-' . time(),
         ]);
 
         // Gán danh mục
@@ -108,9 +109,9 @@ class Admin_BookController extends Controller
         $request->validate([
             'name'      => 'required|string|max:255',
             'author'    => 'required|string|max:255',
+            'summary'   => 'nullable|string|max:1000',
             'publisher' => 'nullable|string|max:255',
             'year'      => 'nullable|integer',
-            'slug'      => 'nullable|string|max:255',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
             'categories' => 'array',
         ]);
@@ -118,9 +119,10 @@ class Admin_BookController extends Controller
         $book->update([
             'name'      => $request->name,
             'author'    => $request->author,
+            'summary'   => $request->summary,
             'publisher' => $request->publisher,
             'year'      => $request->year,
-            'slug'      => $request->slug ?? Str::slug($request->name),
+            'slug'      => Str::slug($request->name)  . '-' . time(),
         ]);
 
         // Cập nhật danh mục
@@ -154,10 +156,12 @@ class Admin_BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::with('images')->findOrFail($id);
         // Xóa ảnh trong storage
         foreach ($book->images as $img) {
-            Storage::disk('public')->delete($img->path);
+            if ($img->url) {
+                Storage::disk('public')->delete($img->url);
+            }
             $img->delete();
         }
         $book->delete();
