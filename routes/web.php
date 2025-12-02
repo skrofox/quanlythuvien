@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\Admin_RentalPricingController;
 use App\Http\Controllers\Admin\Admin_ReviewController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\BookFavoriteController;
 use App\Http\Controllers\FEnd\HeaderController;
 use App\Http\Controllers\FEnd\HomeController;
 use App\Http\Controllers\ProfileController;
@@ -32,6 +33,8 @@ Route::middleware('auth')->group(function () {
     //======= Frontend Auth Router Management ===============
     Route::get('/account', [HeaderController::class, 'account'])->name('account');
     Route::get('/borrow-book/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
+
+    Route::post('book-favorite/{id}', [BookFavoriteController::class, 'store'])->name('book.favorite.store');
 
     Route::get('/read-book/{slug}', [ReadBookController::class, 'read'])->name('book.read');
 

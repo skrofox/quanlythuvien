@@ -34,4 +34,12 @@ class Book extends Model
     public function reviews(){
         return $this->hasMany(Review::class, "book_id", "id");
     }
+
+    public function file(){
+        return $this->hasOne(BookFile::class, "book_id", "id");
+    }
+
+    public function favorites(){
+        return $this->hasMany(Favorite::class, "book_id", "id");
+    }
 }

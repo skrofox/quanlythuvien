@@ -112,7 +112,7 @@
                 <div class="col-md-12">
 
                     <div class="btn-wrap align-right">
-                        <a href="#" class="btn-accent-arrow">Xem tất cả sản phẩm <i
+                        <a href="#" class="btn-accent-arrow">Xem tất cả sách <i
                                 class="icon icon-ns-arrow-right"></i></a>
                     </div>
 
@@ -191,14 +191,18 @@
                                     @forelse ($category->books as $book)
                                         <div class="col-md-3">
                                             <div class="product-item">
-                                                <a href="{{ route('book.detail', $book->slug) }}">
-                                                    <figure class="product-style">
+                                                <figure class="product-style">
+                                                    <a href="{{ route('book.detail', $book->slug) }}">
                                                         <img src="{{ Storage::url($book->images->first()->url ?? '') }}"
                                                             alt="Books" class="product-item">
-                                                        <button type="button" class="add-to-cart"
+                                                    </a>
+                                                    <form action="{{ route('book.favorite.store', $book->id) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <button type="submit" class="add-to-cart"
                                                             data-product-tile="add-to-cart">Yêu thích</button>
-                                                    </figure>
-                                                </a>
+                                                    </form>
+                                                </figure>
                                                 <figcaption>
                                                     <h3>{{ $book->name }}</h3>
                                                     <span>{{ $book->author }}</span>
@@ -497,6 +501,39 @@
     </section>
 
 @endsection
+
+@push('styles')
+    <style>
+        .product-item {
+            width: 100%;
+            height: 100%;
+        }
+
+        .product-style {
+            width: 100%;
+            height: 350px;
+            /* chiều cao cố định cho vùng ảnh */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-style img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* ảnh luôn full khung mà không méo */
+            border-radius: 5px;
+        }
+
+        .product-item .figcaption,
+        figcaption {
+            min-height: 120px;
+            /* chiều cao cố định phần text nếu muốn đồng đều */
+        }
+    </style>
+@endpush
 
 
 @push('scripts')

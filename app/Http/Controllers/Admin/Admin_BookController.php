@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\BookImage;
+use App\Models\BookFile;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -42,6 +43,7 @@ class Admin_BookController extends Controller
             'publisher' => 'nullable|string|max:255',
             'year'      => 'nullable|integer',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
+            'pdf_file'  => 'nullable|file|mimes:pdf|max:51200', // Max 50MB
             'categories' => 'array', // validate mảng danh mục
         ]);
 
@@ -70,6 +72,23 @@ class Admin_BookController extends Controller
             }
         }
 
+        // Upload PDF file (lưu trong public storage)
+        if ($request->hasFile('pdf_file')) {
+            $pdfFile = $request->file('pdf_file');
+            $originalName = $pdfFile->getClientOriginalName();
+            $fileName = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.pdf';
+            $filePath = $pdfFile->storeAs('book_files/pdf', $fileName, 'public');
+
+            BookFile::create([
+                'book_id' => $book->id,
+                'file_path' => $filePath,
+                'file_name' => $fileName,
+                'original_name' => $originalName,
+                'file_size' => $pdfFile->getSize(),
+                'mime_type' => $pdfFile->getMimeType(),
+            ]);
+        }
+
         return redirect()->route('admin.books.list')->with('success', 'Thêm sách thành công!');
     }
 
@@ -87,7 +106,7 @@ class Admin_BookController extends Controller
      */
     public function edit(string $id)
     {
-        $book = Book::with('images')->findOrFail($id);
+        $book = Book::with(['images', 'file'])->findOrFail($id);
         $categories = Category::all();
 
 
@@ -113,6 +132,7 @@ class Admin_BookController extends Controller
             'publisher' => 'nullable|string|max:255',
             'year'      => 'nullable|integer',
             'images.*'  => 'image|mimes:jpg,jpeg,png|max:2048',
+            'pdf_file'  => 'nullable|file|mimes:pdf|max:51200', // Max 50MB
             'categories' => 'array',
         ]);
 
@@ -146,6 +166,30 @@ class Admin_BookController extends Controller
             }
         }
 
+        // Xử lý upload PDF file mới
+        if ($request->hasFile('pdf_file')) {
+            // Xóa file PDF cũ nếu có
+            if ($book->file) {
+                Storage::disk('public')->delete($book->file->file_path);
+                $book->file->delete();
+            }
+
+            // Upload PDF mới
+            $pdfFile = $request->file('pdf_file');
+            $originalName = $pdfFile->getClientOriginalName();
+            $fileName = time() . '_' . Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '.pdf';
+            $filePath = $pdfFile->storeAs('book_files/pdf', $fileName, 'public');
+
+            BookFile::create([
+                'book_id' => $book->id,
+                'file_path' => $filePath,
+                'file_name' => $fileName,
+                'original_name' => $originalName,
+                'file_size' => $pdfFile->getSize(),
+                'mime_type' => $pdfFile->getMimeType(),
+            ]);
+        }
+
         return redirect()->route('admin.books.list')->with('success', 'Cập nhật sách thành công!');
     }
 
@@ -156,7 +200,8 @@ class Admin_BookController extends Controller
      */
     public function destroy($id)
     {
-        $book = Book::with('images')->findOrFail($id);
+        $book = Book::with(['images', 'file'])->findOrFail($id);
+
         // Xóa ảnh trong storage
         foreach ($book->images as $img) {
             if ($img->url) {
@@ -164,6 +209,13 @@ class Admin_BookController extends Controller
             }
             $img->delete();
         }
+
+        // Xóa file PDF nếu có
+        if ($book->file) {
+            Storage::disk('public')->delete($book->file->file_path);
+            $book->file->delete();
+        }
+
         $book->delete();
 
         return redirect()->route('admin.books.list')->with('success', 'Xóa sách thành công!');

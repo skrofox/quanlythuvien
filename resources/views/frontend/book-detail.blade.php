@@ -26,15 +26,34 @@
 
                         <!-- Status Buttons -->
                         <div class="status-buttons mb-3">
-                            {{-- Kiểm tra người dùng đã mượn cuốn sách này chưa --}}
-                            @if ($book->rentals->where('user_id', Auth::id())->where('status', 'active')->count() > 0)
-                                <a href="{{ route('book.read', $book->slug) }}" class="btn btn-primary w-100">Đọc</a>
-                            @else
-                            <form action="{{ route('book.rental.create', $book->slug) }}" method="GET">
-                                <button class="btn btn-primary w-100" type="submit">
-                                    Mượn
+                            @php
+                                $rental = $book->rentals()
+                                    ->where('user_id', Auth::id())
+                                    ->where('status', 'active')
+                                    ->where('due_at', '>=', now())
+                                    ->with('payments')
+                                    ->first();
+
+                                $hasPaid = $rental && $rental->payments()->where('status', 'paid')->exists();
+                            @endphp
+
+                            @if ($rental && $hasPaid)
+                                <a href="{{ route('book.read', $book->slug) }}" class="btn btn-primary w-100">
+                                    <i class="icon icon-book"></i> Đọc sách
+                                </a>
+                                <small class="text-muted d-block mt-2 text-center">
+                                    Hạn trả: {{ \Carbon\Carbon::parse($rental->due_at)->format('d/m/Y') }}
+                                </small>
+                            @elseif ($rental && !$hasPaid)
+                                <button class="btn btn-warning w-100" disabled>
+                                    <i class="icon icon-clock"></i> Chờ thanh toán
                                 </button>
-                            </form>
+                            @else
+                                <form action="{{ route('book.rental.create', $book->slug) }}" method="GET">
+                                    <button class="btn btn-primary w-100" type="submit">
+                                        <i class="icon icon-cart"></i> Mượn sách
+                                    </button>
+                                </form>
                             @endif
                         </div>
 
@@ -179,8 +198,10 @@
                                             <div class="detail-value">
                                                 @if ($book->rentals->where('status', 'active')->count() > 0)
                                                     <span class="badge bg-warning">Đang mượn</span>
-                                                @else
+                                                @elseif($book->file)
                                                     <span class="badge bg-success">Có sẵn</span>
+                                                @elseif(!$book->file)
+                                                    <span class="badge bg-danger">Không có sách</span>
                                                 @endif
                                             </div>
                                         </div>

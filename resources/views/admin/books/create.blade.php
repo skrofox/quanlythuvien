@@ -40,6 +40,13 @@
                 <!-- Preview zone -->
                 <div id="preview" class="d-flex flex-wrap gap-2"></div>
 
+                <!-- Upload PDF File -->
+                <div class="p-2">
+                    <x-adminlte-input-file name="pdf_file" label="File PDF sách" id="pdfFile" 
+                        accept="application/pdf" />
+                    <small class="text-muted">Chỉ chấp nhận file PDF, tối đa 50MB</small>
+                </div>
+
 
                 <x-adminlte-button class="btn-primary mt-3" type="submit" label="Lưu sách" />
             </form>

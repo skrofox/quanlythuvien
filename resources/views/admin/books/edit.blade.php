@@ -38,6 +38,23 @@
                 <x-adminlte-input-file name="images[]" label="Ảnh sách mới" multiple id="bookImages" />
             </div>
 
+            <!-- Upload PDF File -->
+            <div class="p-2">
+                <x-adminlte-input-file name="pdf_file" label="File PDF sách" id="pdfFile" 
+                    accept="application/pdf" />
+                <small class="text-muted">Chỉ chấp nhận file PDF, tối đa 50MB</small>
+                
+                @if($book->file)
+                    <div class="mt-2">
+                        <div class="alert alert-info">
+                            <strong>File PDF hiện tại:</strong> {{ $book->file->original_name }}
+                            <br>
+                            <small>Kích thước: {{ number_format($book->file->file_size / 1024, 2) }} KB</small>
+                        </div>
+                    </div>
+                @endif
+            </div>
+
             <!-- Hiển thị ảnh hiện tại -->
             <h3>Ảnh cũ</h3>
             <div id="current-images" class="d-flex flex-wrap gap-2 mb-3">
