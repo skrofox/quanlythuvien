@@ -45,9 +45,10 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('book.rental.store', $book->slug) }}" method="POST" id="rentalForm">
+                            {{-- form open blank page --}}
+                            <form action="{{ route('vnpay.payment.store') }}" method="POST" id="rentalForm">
                                 @csrf
-
+                                <input type="hidden" name="book_slug" value="{{ $book->slug }}">
                                 <!-- Rental Period Selection -->
                                 <div class="mb-4">
                                     <h5 class="mb-3">Chọn thời gian mượn:</h5>

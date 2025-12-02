@@ -26,11 +26,16 @@
 
                         <!-- Status Buttons -->
                         <div class="status-buttons mb-3">
+                            {{-- Kiểm tra người dùng đã mượn cuốn sách này chưa --}}
+                            @if ($book->rentals->where('user_id', Auth::id())->where('status', 'active')->count() > 0)
+                                <a href="{{ route('book.read', $book->slug) }}" class="btn btn-primary w-100">Đọc</a>
+                            @else
                             <form action="{{ route('book.rental.create', $book->slug) }}" method="GET">
                                 <button class="btn btn-primary w-100" type="submit">
                                     Mượn
                                 </button>
                             </form>
+                            @endif
                         </div>
 
                         <!-- User Rating -->
@@ -126,7 +131,7 @@
                                         </span>
                                     </div>
                                     <div class="engagement-stats text-muted">
-                                        <span>{{ $book->rentals->count() }} Đã mượn</span>
+                                        <span>({{ $book->rentals->count() }}) Đã mượn</span>
                                     </div>
                                 </div>
                             </div>

@@ -11,7 +11,9 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\FEnd\HeaderController;
 use App\Http\Controllers\FEnd\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReadBookController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
 
 //============UnAuth router management================
@@ -29,11 +31,14 @@ Route::middleware('auth')->group(function () {
 
     //======= Frontend Auth Router Management ===============
     Route::get('/account', [HeaderController::class, 'account'])->name('account');
-    Route::get('/book-rental/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
-    Route::post('/book-rental/{slug}', [RentalController::class, 'store'])->name('book.rental.store');
-    Route::get('/payment/process/{paymentId}', [RentalController::class, 'paymentProcess'])->name('book.rental.payment.process');
-    Route::post('/payment/callback/{paymentId}', [RentalController::class, 'paymentCallback'])->name('book.rental.payment.callback');
-    Route::get('/payment/success/{paymentId}', [RentalController::class, 'paymentSuccess'])->name('book.rental.success');
+    Route::get('/borrow-book/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
+
+    Route::get('/read-book/{slug}', [ReadBookController::class, 'read'])->name('book.read');
+
+    //VNPay
+    Route::post('/vnpay-payment/', [VNPayController::class, 'vnpay_payment'])->name('vnpay.payment.store');
+    Route::get('/vnpay-return', [VNPayController::class, 'vnpay_return'])->name('vnpay.return');
+
 });
 
 //========= API Qoutes ============
