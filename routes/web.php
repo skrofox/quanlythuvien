@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Admin_BookController;
 use App\Http\Controllers\Admin\Admin_CategoryController;
 use App\Http\Controllers\Admin\Admin_PaymentController;
+use App\Http\Controllers\Admin\Admin_PostController;
 use App\Http\Controllers\Admin\Admin_RentalController;
 use App\Http\Controllers\Admin\Admin_RentalPricingController;
 use App\Http\Controllers\Admin\Admin_ReviewController;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 //============UnAuth router management================
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/book-detail/{slug}', [HomeController::class, 'book_detail'])->name('book.detail');;
+Route::get('/post-detail/{slug}', [HomeController::class, 'post_detail'])->name('post.detail');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -137,6 +139,16 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/edit/{id}', [Admin_ReviewController::class, 'edit'])->name('edit');
         Route::put('/update/{id}', [Admin_ReviewController::class, 'update'])->name('update');
         Route::delete('/destroy/{id}', [Admin_ReviewController::class, 'destroy'])->name('destroy');
+    });
+
+    //======= Admin Post Router Management ===============
+    Route::prefix('/posts')->name('posts.')->group(function () {
+        Route::get('/', [Admin_PostController::class, 'index'])->name('list');
+        Route::get('/create', [Admin_PostController::class, 'create'])->name('create');
+        Route::post('/store', [Admin_PostController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [Admin_PostController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [Admin_PostController::class, 'update'])->name('update');
+        Route::delete('/destroy/{id}', [Admin_PostController::class, 'destroy'])->name('destroy');
     });
 });
 

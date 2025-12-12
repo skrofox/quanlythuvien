@@ -353,6 +353,11 @@ return [
             'icon' => 'fa-solid fa-star'
         ],
         [
+            'text' => 'Quản lý bài viết',
+            'url' => 'admin/posts',
+            'icon' => 'fa-solid fa-file-pen'
+        ],
+        [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',
