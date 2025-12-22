@@ -87,8 +87,14 @@
                                             <figure class="product-style">
                                                 <img src="{{ Storage::url($book->images->first()->url ?? '') }}"
                                                     alt="Books" class="product-item">
-                                                <button type="button" class="add-to-cart" data-product-tile="add-to-cart">
-                                                    Yêu thích</button>
+                                                <form action="{{ route('book.favorite.store', $book->id) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" class="add-to-cart"
+                                                        data-product-tile="add-to-cart">
+                                                        Yêu thích
+                                                    </button>
+                                                </form>
+
                                             </figure>
                                         </a>
                                         <figcaption>
@@ -390,16 +396,19 @@
 
                                     <figure>
                                         <a href="{{ route('post.detail', $post->slug) }}" class="image-hvr-effect">
-                                            <img src="{{ Storage::url($post->image ?? '') }}" alt="post" class="post-image">
+                                            <img src="{{ Storage::url($post->image ?? '') }}" alt="post"
+                                                class="post-image">
                                         </a>
                                     </figure>
 
                                     <div class="post-item">
                                         <div class="meta-date">{{ $post->created_at->format('d/m/Y') }}</div>
-                                        <h3><a href="{{ route('post.detail', $post->slug) }}">{{ $post->title }}</a></h3>
+                                        <h3><a href="{{ route('post.detail', $post->slug) }}">{{ $post->title }}</a>
+                                        </h3>
 
                                         <div class="links-element">
-                                            <div class="categories">{{ $post->categories->pluck('name')->implode(', ') }}</div>
+                                            <div class="categories">{{ $post->categories->pluck('name')->implode(', ') }}
+                                            </div>
                                             <div class="social-links">
                                                 <ul>
                                                     <li>
@@ -424,8 +433,7 @@
                     <div class="row">
 
                         <div class="btn-wrap align-center">
-                            <a href="#" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Read All
-                                Articles<i class="icon icon-ns-arrow-right"></i></a>
+                            <a href="{{ route('articles.index') }}" class="btn btn-outline-accent btn-accent-arrow" tabindex="0">Tất Cả Bài Viết<i class="icon icon-ns-arrow-right"></i></a>
                         </div>
                     </div>
 

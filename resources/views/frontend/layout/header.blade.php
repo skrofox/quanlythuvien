@@ -23,11 +23,17 @@
                 </div>
                 <div class="col-md-8">
                     <div class="right-element">
+                        @php
+                            $favoriteCount = Auth::check() ? Auth::user()->favorites()->count() : 0;
+                        @endphp
                         <p class="text-end">Xin chào, <u> {{ Auth::user()->name ?? 'Bạn thân mến' }}!</u></p>
-                        <a href="{{ route('account') }}" class="user-account for-buy"><i
-                                class="icon icon-user"></i><span>Tài Khoản</span></a>
-                        <a href="" class="cart for-buy"><i class="icon icon-clipboard"></i><span>Yêu
-                                Thích:(0)</span></a>
+                        <a href="{{ route('account') }}" class="user-account for-buy">
+                            <i class="icon icon-user"></i><span>Tài Khoản</span>
+                        </a>
+                        <a href="{{ route('favorites') }}" class="cart for-buy">
+                            <i class="icon icon-clipboard"></i>
+                            <span>Yêu Thích:({{ $favoriteCount }})</span>
+                        </a>
 
                         <div class="action-menu">
 
@@ -35,8 +41,9 @@
                                 <a href="#" class="search-button search-toggle" data-selector="#header-wrap">
                                     <i class="icon icon-search"></i>
                                 </a>
-                                <form role="search" method="get" class="search-box">
-                                    <input class="search-field text search-input" placeholder="Search" type="search">
+                                <form role="search" method="get" action="{{ route('articles.index') }}" class="search-box">
+                                    <input class="search-field text search-input" name="search" placeholder="Tìm kiếm bài viết..." type="search" value="{{ request('search') }}">
+                                    <button type="submit" style="display: none;"></button>
                                 </form>
                             </div>
                         </div>
@@ -70,21 +77,20 @@
                                     <a href="#pages" class="nav-link">Trang</a>
 
                                     <ul>
-                                        <li class="active"><a href="index.html">Trang chủ</a></li>
-                                        <li><a href="index.html">Về Chúng Tôi</a></li>
-                                        <li><a href="index.html">Blog</a></li>
-                                        <li><a href="index.html">Liên Hệ</a></li>
-                                        <li><a href="index.html">Cảm Ơn</a></li>
+                                        <li class="active"><a href="{{ route('home') }}">Trang chủ</a></li>
+                                        <li><a href="{{ route('about') }}">Về Chúng Tôi</a></li>
+                                        <li><a href="{{ route('contact') }}">Liên Hệ</a></li>
+                                        <li><a href="{{ route('thanks') }}">Cảm Ơn</a></li>
                                     </ul>
                                 </li>
-                                <li class="menu-item"><a href="#latest-blog" class="nav-link">Bài Viết</a></li>
+                                <li class="menu-item"><a href="{{ route('articles.index') }}" class="nav-link">Bài Viết</a></li>
                                 <li class="menu-item">
                                     <a href="#pages" class="nav-link">Cá Nhân Hóa</a>
 
                                     <ul>
                                         <li><a href="{{ route('account') }}">Tài Khoản</a></li>
-                                        <li><a href="#">Yêu Thích</a></li>
-                                        <li><a href="#">Lịch Sử Đọc</a></li>
+                                        <li><a href="{{ route('favorites') }}">Yêu Thích</a></li>
+                                        {{-- <li><a href="#">Lịch Sử Đọc</a></li> --}}
                                         @if (!Auth::check())
                                             <li>
                                                 <form action="{{ route('login') }}" method="get">

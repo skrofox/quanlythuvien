@@ -34,6 +34,11 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
+        // Redirect to account page if coming from there, otherwise to profile edit
+        if (request()->header('referer') && str_contains(request()->header('referer'), route('account'))) {
+            return Redirect::route('account')->with('status', 'profile-updated');
+        }
+
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Admin_RentalPricingController;
 use App\Http\Controllers\Admin\Admin_ReviewController;
 use App\Http\Controllers\Admin\Admin_UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\BookFavoriteController;
 use App\Http\Controllers\FEnd\HeaderController;
 use App\Http\Controllers\FEnd\HomeController;
@@ -23,6 +24,22 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/book-detail/{slug}', [HomeController::class, 'book_detail'])->name('book.detail');;
 Route::get('/post-detail/{slug}', [HomeController::class, 'post_detail'])->name('post.detail');
 
+//============ Articles Router Management================
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+
+//============ Static Pages Router Management================
+Route::get('/about', function () {
+    return view('frontend.about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('frontend.contact');
+})->name('contact');
+
+Route::get('/thanks', function () {
+    return view('frontend.thanks');
+})->name('thanks');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -34,6 +51,7 @@ Route::middleware('auth')->group(function () {
 
     //======= Frontend Auth Router Management ===============
     Route::get('/account', [HeaderController::class, 'account'])->name('account');
+    Route::get('/favorites', [HeaderController::class, 'favorites'])->name('favorites');
     Route::get('/borrow-book/{slug}', [RentalController::class, 'index'])->name('book.rental.create');
 
     Route::post('book-favorite/{id}', [BookFavoriteController::class, 'store'])->name('book.favorite.store');
