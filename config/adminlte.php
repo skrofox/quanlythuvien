@@ -358,6 +358,11 @@ return [
             'icon' => 'fa-solid fa-file-pen'
         ],
         [
+            'text' => 'Quản lý đánh giá',
+            'url' => 'admin/reviews',
+            'icon' => 'fa-solid fa-star'
+        ],
+        [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',

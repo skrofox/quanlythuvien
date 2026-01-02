@@ -57,17 +57,6 @@
                             @endif
                         </div>
 
-                        <!-- User Rating -->
-                        <div class="user-rating mb-3">
-                            <label class="form-label">Đánh giá của bạn:</label>
-                            <div class="star-rating">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <span class="star" data-rating="{{ $i }}"
-                                        style="font-size: 24px; color: #ddd; cursor: pointer;">★</span>
-                                @endfor
-                            </div>
-                        </div>
-
                         <!-- Action Icons -->
                         <div class="action-icons">
                             <div class="d-flex flex-column gap-2">
@@ -274,27 +263,97 @@
                         <!-- Reviews Tab -->
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <div class="reviews-section">
+                                <!-- Form đánh giá -->
+                                @if(Auth::check() && $canReview && !$userReview)
+                                    <div class="card mb-4">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Viết đánh giá của bạn</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form action="{{ route('reviews.store', $book->id) }}" method="POST" id="review-form">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label class="form-label">Đánh giá <span class="text-danger">*</span></label>
+                                                    <div class="star-rating-input">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            <span class="star-input" data-rating="{{ $i }}" style="font-size: 32px; color: #ddd; cursor: pointer; margin-right: 5px;">★</span>
+                                                        @endfor
+                                                        <input type="hidden" name="rating" id="rating-input" value="" required>
+                                                    </div>
+                                                    @error('rating')
+                                                        <div class="text-danger small">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label for="comment" class="form-label">Bình luận</label>
+                                                    <textarea class="form-control @error('comment') is-invalid @enderror"
+                                                              id="comment"
+                                                              name="comment"
+                                                              rows="4"
+                                                              placeholder="Chia sẻ suy nghĩ của bạn về cuốn sách này...">{{ old('comment') }}</textarea>
+                                                    @error('comment')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="icon icon-check"></i> Gửi đánh giá
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @elseif(Auth::check() && $userReview)
+                                    <div class="alert alert-info mb-4">
+                                        <i class="icon icon-info"></i> Bạn đã đánh giá cuốn sách này rồi.
+                                    </div>
+                                @elseif(!Auth::check())
+                                    <div class="alert alert-warning mb-4">
+                                        <i class="icon icon-warning"></i> Vui lòng <a href="{{ route('login') }}">đăng nhập</a> và thuê sách để có thể đánh giá.
+                                    </div>
+                                @elseif(!$canReview)
+                                    <div class="alert alert-warning mb-4">
+                                        <i class="icon icon-warning"></i> Bạn chỉ có thể đánh giá sách mà bạn đã hoặc đang thuê.
+                                    </div>
+                                @endif
+
+                                <!-- Danh sách đánh giá -->
+                                <h5 class="mb-3">Đánh giá ({{ $book->reviews->count() }})</h5>
                                 @if ($book->reviews->count() > 0)
                                     @foreach ($book->reviews as $review)
                                         <div class="review-item border-bottom pb-3 mb-3">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
-                                                <div>
-                                                    <strong>{{ $review->user->name ?? 'Người dùng' }}</strong>
-                                                    <div class="review-rating">
-                                                        @for ($i = 1; $i <= 5; $i++)
-                                                            @if ($i <= $review->rating)
-                                                                <span style="color: #ffc107; font-size: 14px;">★</span>
-                                                            @else
-                                                                <span style="color: #ddd; font-size: 14px;">★</span>
+                                                <div class="flex-grow-1">
+                                                    <div class="d-flex justify-content-between align-items-start">
+                                                        <div>
+                                                            <strong>{{ $review->user->name ?? 'Người dùng' }}</strong>
+                                                            <div class="review-rating">
+                                                                @for ($i = 1; $i <= 5; $i++)
+                                                                    @if ($i <= $review->rating)
+                                                                        <span style="color: #ffc107; font-size: 14px;">★</span>
+                                                                    @else
+                                                                        <span style="color: #ddd; font-size: 14px;">★</span>
+                                                                    @endif
+                                                                @endfor
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-end">
+                                                            <small class="text-muted d-block">{{ $review->created_at->diffForHumans() }}</small>
+                                                            @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::id() == $review->user_id))
+                                                                <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="d-inline mt-2" onsubmit="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                        <i class="icon icon-trash"></i> Xóa
+                                                                    </button>
+                                                                </form>
                                                             @endif
-                                                        @endfor
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <small
-                                                    class="text-muted">{{ $review->created_at->diffForHumans() }}</small>
                                             </div>
                                             @if ($review->comment)
-                                                <p class="mb-0">{{ $review->comment }}</p>
+                                                <p class="mb-0 mt-2">{{ $review->comment }}</p>
                                             @endif
                                         </div>
                                     @endforeach
@@ -377,9 +436,32 @@
                 color: #ffc107;
             }
 
+            .star-rating-input .star-input {
+                transition: all 0.2s ease;
+            }
+
+            .star-rating-input .star-input:hover {
+                transform: scale(1.2);
+            }
+
+            .star-rating-input .star-input.active {
+                color: #ffc107 !important;
+            }
+
             .read-more-link {
                 color: #0066cc;
                 text-decoration: none;
+            }
+
+            .review-item {
+                position: relative;
+            }
+
+            .review-item:hover {
+                background-color: #f8f9fa;
+                border-radius: 5px;
+                padding: 10px;
+                margin: -10px;
             }
 
             .read-more-link:hover {
@@ -390,11 +472,12 @@
 
     @push('scripts')
         <script>
-            // Star rating interaction
-            document.querySelectorAll('.star-rating .star').forEach(star => {
+            // Star rating interaction for form
+            document.querySelectorAll('.star-rating-input .star-input').forEach(star => {
                 star.addEventListener('click', function() {
-                    const rating = this.getAttribute('data-rating');
-                    const stars = this.parentElement.querySelectorAll('.star');
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const stars = this.parentElement.querySelectorAll('.star-input');
+                    const ratingInput = document.getElementById('rating-input');
 
                     stars.forEach((s, index) => {
                         if (index < rating) {
@@ -406,13 +489,12 @@
                         }
                     });
 
-                    // Here you can add AJAX call to save rating
-                    console.log('Rating:', rating);
+                    ratingInput.value = rating;
                 });
 
                 star.addEventListener('mouseenter', function() {
-                    const rating = this.getAttribute('data-rating');
-                    const stars = this.parentElement.querySelectorAll('.star');
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    const stars = this.parentElement.querySelectorAll('.star-input');
 
                     stars.forEach((s, index) => {
                         if (index < rating) {
@@ -422,13 +504,28 @@
                 });
 
                 star.addEventListener('mouseleave', function() {
-                    const stars = this.parentElement.querySelectorAll('.star');
-                    stars.forEach(s => {
-                        if (!s.classList.contains('active')) {
+                    const stars = this.parentElement.querySelectorAll('.star-input');
+                    const ratingInput = document.getElementById('rating-input');
+                    const currentRating = parseInt(ratingInput.value) || 0;
+
+                    stars.forEach((s, index) => {
+                        if (index < currentRating) {
+                            s.style.color = '#ffc107';
+                        } else {
                             s.style.color = '#ddd';
                         }
                     });
                 });
+            });
+
+            // Validate form before submit
+            document.getElementById('review-form')?.addEventListener('submit', function(e) {
+                const rating = document.getElementById('rating-input').value;
+                if (!rating) {
+                    e.preventDefault();
+                    alert('Vui lòng chọn số sao đánh giá.');
+                    return false;
+                }
             });
         </script>
     @endpush

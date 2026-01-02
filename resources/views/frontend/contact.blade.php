@@ -23,26 +23,20 @@
                             <form id="contact-form" method="POST" action="#">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
-                                    <input type="text" 
-                                           class="form-control @error('name') is-invalid @enderror" 
-                                           id="name" 
-                                           name="name" 
-                                           value="{{ old('name') }}" 
-                                           required>
+                                    <label for="name" class="form-label">Họ và tên <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                        id="name" name="name" value="{{ old('name') }}" required>
                                     @error('name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email" 
-                                           class="form-control @error('email') is-invalid @enderror" 
-                                           id="email" 
-                                           name="email" 
-                                           value="{{ old('email') }}" 
-                                           required>
+                                    <label for="email" class="form-label">Email <span
+                                            class="text-danger">*</span></label>
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                        id="email" name="email" value="{{ old('email') }}" required>
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -50,36 +44,28 @@
 
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Số điện thoại</label>
-                                    <input type="tel" 
-                                           class="form-control @error('phone') is-invalid @enderror" 
-                                           id="phone" 
-                                           name="phone" 
-                                           value="{{ old('phone') }}">
+                                    <input type="tel" class="form-control @error('phone') is-invalid @enderror"
+                                        id="phone" name="phone" value="{{ old('phone') }}">
                                     @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="subject" class="form-label">Chủ đề <span class="text-danger">*</span></label>
-                                    <input type="text" 
-                                           class="form-control @error('subject') is-invalid @enderror" 
-                                           id="subject" 
-                                           name="subject" 
-                                           value="{{ old('subject') }}" 
-                                           required>
+                                    <label for="subject" class="form-label">Chủ đề <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('subject') is-invalid @enderror"
+                                        id="subject" name="subject" value="{{ old('subject') }}" required>
                                     @error('subject')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="message" class="form-label">Nội dung tin nhắn <span class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('message') is-invalid @enderror" 
-                                              id="message" 
-                                              name="message" 
-                                              rows="5" 
-                                              required>{{ old('message') }}</textarea>
+                                    <label for="message" class="form-label">Nội dung tin nhắn <span
+                                            class="text-danger">*</span></label>
+                                    <textarea class="form-control @error('message') is-invalid @enderror" id="message" name="message" rows="5"
+                                        required>{{ old('message') }}</textarea>
                                     @error('message')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -109,8 +95,8 @@
                                     <div>
                                         <h5 class="mb-2">Địa chỉ</h5>
                                         <p class="text-muted mb-0">
-                                            123 Đường ABC, Phường XYZ<br>
-                                            Quận 1, Thành phố Hồ Chí Minh<br>
+                                            143 Nguyễn Lương Bằng<br>
+                                            Quận Liên Chiểu, TP Đà Nẵng<br>
                                             Việt Nam
                                         </p>
                                     </div>
@@ -140,8 +126,10 @@
                                     <div>
                                         <h5 class="mb-2">Email</h5>
                                         <p class="text-muted mb-0">
-                                            <a href="mailto:info@thuvien.com" class="text-decoration-none">info@thuvien.com</a><br>
-                                            <a href="mailto:support@thuvien.com" class="text-decoration-none">support@thuvien.com</a>
+                                            <a href="mailto:info@thuvien.com"
+                                                class="text-decoration-none">info@thuvien.com</a><br>
+                                            <a href="mailto:support@thuvien.com"
+                                                class="text-decoration-none">support@thuvien.com</a>
                                         </p>
                                     </div>
                                 </div>
@@ -166,11 +154,17 @@
 
                     <!-- Google Maps -->
                     <div class="card shadow-sm">
-                        <div class="card-header bg-success text-white">
+                        {{-- <div class="card-header bg-success text-white">
                             <h3 class="h5 mb-0">Bản đồ</h3>
                         </div>
                         <div class="card-body p-0">
                             <div id="map" style="height: 400px; width: 100%;"></div>
+                        </div> --}}
+                        <div class="card-body p-0">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3833.7904401422334!2d108.14582087471645!3d16.076360784604155!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314218d3fea0d5d9%3A0xd900c37924c1fa80!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEtpbmggdOG6vyAtIEvhur8gaG_huqFjaCDEkMOgIE7hurVuZw!5e0!3m2!1sen!2s!4v1767337150139!5m2!1sen!2s"
+                                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade" async defer></script>
                         </div>
                     </div>
                 </div>
@@ -179,59 +173,14 @@
     </section>
 
     @push('scripts')
-        <!-- Google Maps API -->
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
         <script>
-            function initMap() {
-                // Tọa độ địa chỉ (Thay đổi theo địa chỉ thực tế)
-                // Ví dụ: 10.762622, 106.660172 (Quận 1, TP.HCM)
-                const location = { lat: 10.762622, lng: 106.660172 };
-                
-                // Tạo map
-                const map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 15,
-                    center: location,
-                    mapTypeControl: true,
-                    streetViewControl: true,
-                    fullscreenControl: true,
-                });
-
-                // Thêm marker
-                const marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    title: "Thư viện của chúng tôi",
-                    animation: google.maps.Animation.DROP,
-                });
-
-                // Thêm info window
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="padding: 10px;">
-                            <h5 style="margin: 0 0 10px 0;">Thư viện của chúng tôi</h5>
-                            <p style="margin: 0; color: #666;">
-                                123 Đường ABC, Phường XYZ<br>
-                                Quận 1, Thành phố Hồ Chí Minh
-                            </p>
-                        </div>
-                    `
-                });
-
-                marker.addListener("click", () => {
-                    infoWindow.open(map, marker);
-                });
-
-                // Mở info window mặc định
-                infoWindow.open(map, marker);
-            }
-
             // Xử lý form submit
             document.getElementById('contact-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 // Hiển thị thông báo (có thể thay bằng AJAX call)
                 alert('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.');
-                
+
                 // Reset form
                 this.reset();
             });
@@ -267,4 +216,3 @@
         }
     </style>
 @endsection
-

@@ -56,42 +56,8 @@ class Admin_ReviewController extends Controller
      */
     public function show(string $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $review = Review::findOrFail($id);
-        $users = User::orderBy('name')->get();
-        $books = Book::orderBy('name')->get();
-        return view('admin.reviews.edit', compact('review', 'users', 'books'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        $review = Review::findOrFail($id);
-
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string|max:1000',
-        ]);
-
-        $review->update([
-            'user_id' => $request->user_id,
-            'book_id' => $request->book_id,
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-
-        return redirect()->route('admin.reviews.list')->with('success', 'Cập nhật đánh giá thành công!');
+        $review = Review::with(['user', 'book'])->findOrFail($id);
+        return view('admin.reviews.show', compact('review'));
     }
 
     /**

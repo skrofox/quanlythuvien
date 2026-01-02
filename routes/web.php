@@ -16,6 +16,7 @@ use App\Http\Controllers\FEnd\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReadBookController;
 use App\Http\Controllers\RentalController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\VNPayController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,10 @@ Route::middleware('auth')->group(function () {
     Route::post('book-favorite/{id}', [BookFavoriteController::class, 'store'])->name('book.favorite.store');
 
     Route::get('/read-book/{slug}', [ReadBookController::class, 'read'])->name('book.read');
+
+    // Reviews
+    Route::post('/reviews/{bookId}', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
 
     //VNPay
     Route::post('/vnpay-payment/', [VNPayController::class, 'vnpay_payment'])->name('vnpay.payment.store');
@@ -154,8 +159,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/', [Admin_ReviewController::class, 'index'])->name('list');
         Route::get('/create', [Admin_ReviewController::class, 'create'])->name('create');
         Route::post('/store', [Admin_ReviewController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [Admin_ReviewController::class, 'edit'])->name('edit');
-        Route::put('/update/{id}', [Admin_ReviewController::class, 'update'])->name('update');
+        Route::get('/show/{id}', [Admin_ReviewController::class, 'show'])->name('show');
         Route::delete('/destroy/{id}', [Admin_ReviewController::class, 'destroy'])->name('destroy');
     });
 

@@ -44,7 +44,24 @@ class HomeController extends Controller
         $avgRating = $book->reviews->avg('rating') ?? 0;
         $ratingCount = $book->reviews->count();
 
-        return view('frontend.book-detail', compact('book', 'avgRating', 'ratingCount', 'relatedBooks'));
+        // Kiểm tra user đã/đang thuê sách này chưa
+        $canReview = false;
+        $userReview = null;
+        if (Auth::check()) {
+            $hasRented = \App\Models\Rentals::where('user_id', Auth::id())
+                ->where('book_id', $book->id)
+                ->whereIn('status', ['active', 'returned', 'late'])
+                ->exists();
+            
+            if ($hasRented) {
+                $canReview = true;
+                $userReview = \App\Models\Review::where('user_id', Auth::id())
+                    ->where('book_id', $book->id)
+                    ->first();
+            }
+        }
+
+        return view('frontend.book-detail', compact('book', 'avgRating', 'ratingCount', 'relatedBooks', 'canReview', 'userReview'));
     }
 
     public function post_detail($slug)

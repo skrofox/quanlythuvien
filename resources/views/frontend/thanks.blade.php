@@ -10,7 +10,7 @@
                     <div class="text-center mb-5">
                         <!-- Icon cảm ơn -->
                         <div class="thanks-icon mb-4">
-                            <div class="icon-circle bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                            <div class="icon-circle bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center"
                                  style="width: 120px; height: 120px;">
                                 <i class="icon icon-check" style="font-size: 64px;"></i>
                             </div>
@@ -28,11 +28,11 @@
                             <div class="thanks-content text-center">
                                 <h3 class="h4 mb-4">Bạn đã làm gì đó tuyệt vời!</h3>
                                 <p class="text-muted mb-4">
-                                    Dù bạn đã mượn sách, đăng ký thành viên, hay đơn giản là ghé thăm trang web của chúng tôi, 
+                                    Dù bạn đã mượn sách, đăng ký thành viên, hay đơn giản là ghé thăm trang web của chúng tôi,
                                     chúng tôi đều rất biết ơn sự quan tâm của bạn.
                                 </p>
                                 <p class="text-muted mb-4">
-                                    Thư viện của chúng tôi luôn nỗ lực để mang đến những trải nghiệm tốt nhất cho bạn. 
+                                    Thư viện của chúng tôi luôn nỗ lực để mang đến những trải nghiệm tốt nhất cho bạn.
                                     Nếu bạn có bất kỳ câu hỏi hoặc góp ý nào, đừng ngần ngại liên hệ với chúng tôi.
                                 </p>
                             </div>
@@ -74,7 +74,7 @@
                     <!-- Thông tin bổ sung -->
                     <div class="card bg-light">
                         <div class="card-body p-4">
-                            <h5 class="h6 mb-3">Bạn có thể quan tâm:</h5>
+                            <h5 class="h3 mb-3 text-black">Bạn có thể quan tâm:</h5>
                             <ul class="list-unstyled mb-0">
                                 <li class="mb-2">
                                     <i class="icon icon-arrow-right text-primary me-2"></i>

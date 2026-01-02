@@ -64,13 +64,15 @@
                                 </div>
                             </td>
                             <td>
-                                <a href="{{ route('admin.reviews.edit', $review->id) }}" class="btn btn-primary btn-sm"><i
-                                        class="fas fa-edit"></i></a>
+                                <a href="{{ route('admin.reviews.show', $review->id) }}" class="btn btn-info btn-sm" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                                 <form action="{{ route('admin.reviews.destroy', $review->id) }}" method="POST"
                                     class="d-inline">
                                     @csrf @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa?')" class="btn btn-danger btn-sm"><i
-                                            class="fas fa-trash"></i></button>
+                                    <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa đánh giá này?')" class="btn btn-danger btn-sm" title="Xóa">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>

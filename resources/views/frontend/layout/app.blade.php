@@ -98,6 +98,57 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Facebook Inbox Icon */
+        .facebook-inbox-icon {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1877f2 0%, #42a5f5 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+            z-index: 9998;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .facebook-inbox-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(24, 119, 242, 0.6);
+            background: linear-gradient(135deg, #42a5f5 0%, #1877f2 100%);
+        }
+
+        .facebook-inbox-icon:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(24, 119, 242, 0.7);
+            }
+        }
+
+        /* Responsive cho mobile */
+        @media (max-width: 768px) {
+            .facebook-inbox-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
 
     @stack('styles')
@@ -114,8 +165,15 @@
         </div>
         @yield('content')
     </main>
-
+    <!-- Facebook Inbox Icon -->
+    <a href="https://www.facebook.com"
+       target="_blank"
+       class="facebook-inbox-icon"
+       title="Liên hệ qua Facebook">
+        <i class="icon icon-facebook"></i>
+    </a>
     @include('frontend.layout.footer')
+
 
     <script src="{{ asset('assets/frontend/js/jquery-1.11.0.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
