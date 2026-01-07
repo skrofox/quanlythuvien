@@ -35,10 +35,10 @@
                 <div class="col-12">
                     <div class="card shadow-sm">
                         <div class="card-body p-0">
-                            <div id="pdf-viewer-container" style="height: calc(100vh - 200px); min-height: 600px;">
+                            <div id="pdf-viewer-container" style="height: calc(100vh - 200px); min-height: 400px;">
                                 @if ($book->file)
                                     <iframe
-                                        src="{{ asset('pdfjs/web/viewer.html') }}?file={{ urlencode(Storage::url($book->file->file_path)) }}"
+                                        src="{{ asset('pdfjs/web/viewer.html') }}?file={{ urlencode(Storage::url("book_files/pdf/" . $book->file->original_name)) }}"
                                         style="width: 100%; height: 100vh; border: none;">
                                     </iframe>
                                 @else
