@@ -5283,7 +5283,7 @@
       }
 
 .download:is(:is(#altTextSettingsDialog #altTextSettingsContainer) #aiModelSettings) #deleteModelButton{
-          display:none;
+          display:none !important;
         }
 
 :is(:is(#altTextSettingsDialog #altTextSettingsContainer) #aiModelSettings):not(.download) #downloadModelButton{
@@ -7484,4 +7484,14 @@ dialog :link{
   #scaleSelectContainer{
     display:none;
   }
+}
+
+/* ===== Custom: Hide Print & Download Buttons ===== */
+/* Main toolbar buttons */
+#toolbarContainer #printButton,
+#toolbarContainer #downloadButton,
+/* Secondary toolbar buttons */
+#secondaryPrint,
+#secondaryDownload {
+  display: none !important;
 }

@@ -89,6 +89,11 @@
 @endpush
 
 @push('scripts')
+<script>
+    $(function(){
+        $('#download').hide();
+    });
+    </script>
     <script>
         document.getElementById("btn-fullscreen").addEventListener("click", function() {
             let elem = document.getElementById("pdf-viewer-container");
